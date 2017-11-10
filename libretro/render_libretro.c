@@ -388,7 +388,7 @@ static void cpu_thread_wrapper()
 
 #ifndef NO_Z80
    init_z80_opts(&z_opts, z80_map, 5, NULL, 0, MCLKS_PER_Z80);
-   init_z80_context(&z_context, &z_opts);
+   init_z80_context(&z_opts);
    z80_assert_reset(&z_context, 0);
 #endif
 
@@ -401,7 +401,7 @@ static void cpu_thread_wrapper()
    gen.ym = &y_context;
    gen.psg = &p_context;
    genesis = &gen;
-   setup_io_devices(config, gen.ports);
+   setup_io_devices(config, &info, gen.ports);
 
    set_keybindings(gen.ports);
 
@@ -480,10 +480,9 @@ static tern_node *init_config(void)
 }
 
 
-m68k_context *debugger(m68k_context *context, uint32_t address)
+void debugger(m68k_context *context, uint32_t address)
 {
    (void)address;
-   return context;
 }
 
 void init_terminal()
@@ -494,10 +493,9 @@ void gdb_remote_init(void)
 {
 }
 
-m68k_context *gdb_debug_enter(m68k_context * context, uint32_t pc)
+void gdb_debug_enter(m68k_context * context, uint32_t pc)
 {
    (void)pc;
-   return context;
 }
 
 RETRO_API void retro_run(void)
